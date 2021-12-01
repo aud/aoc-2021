@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+if [ $# != 1 ]; then
+  echo "Usage: $(basename "$0") xx" >&2
+  exit 1
+fi
+
+dir="day$1"
+main="$dir/main.rb"
+
+echo "Setting up $main"
+
+mkdir $dir
+
+cat <<EOF >> $main
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "pry-byebug"
+
+def input
+  @input ||= DATA.read
+end
+
+def part1
+  raise NotImplementedError
+end
+
+def part2
+  raise NotImplementedError
+end
+
+a = Time.now
+p1_sol = part1
+b = Time.now
+puts "Part 1: #{p1_sol}, time: #{b - a}"
+
+
+a = Time.now
+p2_sol = part2
+b = Time.now
+puts "Part 2: #{p2_sol}, time: #{b - a}"
+
+__END__
+EOF
+
+chmod +x $main
