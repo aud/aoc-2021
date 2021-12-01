@@ -8,52 +8,54 @@ def input
 end
 
 def part1
-  # Initial version
-  #
-  # prev = 0
-  # increases = 0
+  prev = 0
 
-  # input.count do |depth|
-  #   if depth > prev
-  #     increases += 1
-  #   end
-  #   prev = depth
-  # end
-
-  # increases
-  #
-
-  # Refactored
-  input.each_cons(2).count { _1 < _2 }
+  input.count do |depth|
+    ret = depth > prev
+    prev = depth
+    ret
+  end - 1 # No measurement for first
 end
 
 def part2
-  # Initial version
-  #
-  # prev = input.max + 1
-  # increases = 0
+  prev = 0
+  window = []
+  window_full = false
 
-  # input.each_cons(3) do |i|
-  #   increases += 1 if i.sum > prev
-  #   prev = i.sum
-  # end
+  input.count do |depth|
+    window << depth
 
-  # increases
+    if window_full || window.size > 3
+      window_full = true
+      window.shift
+    end
 
-  # Refactored
-  input.each_cons(3).map(&:sum).each_cons(2).count { _1 < _2 }
+    sum = window.sum
+    ret = sum > prev && window_full
+    prev = sum
+    ret
+  end
 end
 
-a = Time.now
-p1_sol = part1
-b = Time.now
-puts "Part 1: #{p1_sol}, time: #{b - a}"
+time = 10_000.times.sum do
+  a = Time.now
+  part1
+  b = Time.now
 
+  b - a
+end
 
-a = Time.now
-p2_sol = part2
-b = Time.now
-puts "Part 2: #{p2_sol}, time: #{b - a}"
+puts "Part 1: #{part1}, (10_000 iters): #{time}"
+
+time = 10_000.times.sum do
+  a = Time.now
+  part2
+  b = Time.now
+
+  b - a
+end
+
+puts "Part 2: #{part2}, (10_000 iters): #{time}"
 
 __END__
 123
