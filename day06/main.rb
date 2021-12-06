@@ -57,26 +57,38 @@ end
 # Take 2 (PERF!!) -- 10k for 256 is ~4.5s
 #
 # def solve(days)
-#   ocean = Array.new(9) { 0 }
+#   ocean = Hash.new(0)
 
-#   input.tally.each do |fish, count|
-#     ocean[fish] = count
+#   input.tally.each do |k, v|
+#     ocean[k] = v
 #   end
 
 #   days.times do
-#     new_fish = ocean.shift
-#     ocean << new_fish
-#     ocean[6] += new_fish
+#     pond = Hash.new(0)
+
+#     ocean.each do |fish, count|
+#       if fish == 0
+#         pond[6] += count
+#         pond[8] += count
+#       else
+#         pond[fish - 1] += count
+#       end
+#     end
+
+#     # Migrate fish from pond to ocean..
+#     ocean = pond
 #   end
 
-#   ocean.sum
+#   ocean.values.sum
 # end
 
 # Take 3, even faster... -- 10k for 256 is ~0.35s
 def solve(days)
   ocean = Array.new(9) { 0 }
 
-  input.tally.each do |fish, count|
+  input
+    .tally
+    .each do |fish, count|
     ocean[fish] = count
   end
 
