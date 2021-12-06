@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require "benchmark"
+
 def input
   @input ||= DATA.read.split(",").map(&:to_i)
 end
@@ -52,31 +54,39 @@ end
 #   lantern_fish.count
 # end
 
-# Take 2 (PERF!!)
-def solve(days)
-  ocean = Hash.new(0)
+# Take 2 (PERF!!) -- 10k for 256 is ~4.5s
+#
+# def solve(days)
+#   ocean = Array.new(9) { 0 }
 
-  input.tally.each do |k, v|
-    ocean[k] = v
+#   input.tally.each do |fish, count|
+#     ocean[fish] = count
+#   end
+
+#   days.times do
+#     new_fish = ocean.shift
+#     ocean << new_fish
+#     ocean[6] += new_fish
+#   end
+
+#   ocean.sum
+# end
+
+# Take 3, even faster... -- 10k for 256 is ~0.35s
+def solve(days)
+  ocean = Array.new(9) { 0 }
+
+  input.tally.each do |fish, count|
+    ocean[fish] = count
   end
 
   days.times do
-    pond = Hash.new(0)
-
-    ocean.each do |fish, count|
-      if fish == 0
-        pond[6] += count
-        pond[8] += count
-      else
-        pond[fish - 1] += count
-      end
-    end
-
-    # Migrate fish from pond to ocean..
-    ocean = pond
+    new_fish = ocean.shift
+    ocean << new_fish
+    ocean[6] += new_fish
   end
 
-  ocean.values.sum
+  ocean.sum
 end
 
 def part1
@@ -87,6 +97,11 @@ def part2
   solve(256)
 end
 
+puts Benchmark.measure {
+  10_000.times do
+    part2
+  end
+}
 puts "Part 1: #{part1}"
 puts "Part 2: #{part2}"
 
