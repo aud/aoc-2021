@@ -30,16 +30,8 @@ def part2
   raise NotImplementedError
 end
 
-a = Time.now
-p1_sol = part1
-b = Time.now
-puts "Part 1: #{p1_sol}, time: #{b - a}"
-
-
-a = Time.now
-p2_sol = part2
-b = Time.now
-puts "Part 2: #{p2_sol}, time: #{b - a}"
+puts "Part 1: #{part1}"
+puts "Part 2: #{part2}"
 
 __END__
 EOF
